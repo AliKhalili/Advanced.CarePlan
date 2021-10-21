@@ -1,0 +1,594 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Advanced Care Plan Exercise WebAPIs",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/care-plans": {
+            "post": {
+                "tags": [
+                    "CarePlan"
+                ],
+                "description": "Add a new care plan record to the application.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateCarePlanModel"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Return the newly added care plan record.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetCarePlanModel"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Return the errors for the given care plan record.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorsDescription"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Return the unauthorized errors when api key header is not provide or not valid.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorsDescription"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Return internal server error if something has gone wrong.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InternalServerErrorDescription"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "CarePlan"
+                ],
+                "description": "Get information for all care plans.",
+                "parameters": [
+                    {
+                        "name": "patient_name",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return information for all care plans.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/GetCarePlanModel"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Return the unauthorized errors when api key header is not provide or not valid.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorsDescription"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/care-plans/{care_plan_id}": {
+            "get": {
+                "tags": [
+                    "CarePlan"
+                ],
+                "description": "Get care plan information for given care_plan_id.",
+                "parameters": [
+                    {
+                        "name": "care_plan_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return the care plan record for given care_plan_id.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetCarePlanModel"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Return the unauthorized errors when api key header is not provide or not valid.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorsDescription"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "For the given care_plan_id is not found any record."
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "CarePlan"
+                ],
+                "description": "Update care plan(totally replace an existing record).",
+                "parameters": [
+                    {
+                        "name": "care_plan_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateCarePlanModel"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Update has done successfully."
+                    },
+                    "400": {
+                        "description": "Return the errors for the given care plan record.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorsDescription"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Return the unauthorized errors when api key header is not provide or not valid.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorsDescription"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "For the given care_plan_id is not found any record."
+                    },
+                    "500": {
+                        "description": "Return internal server error if something has gone wrong.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InternalServerErrorDescription"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "CarePlan"
+                ],
+                "description": "Delete care plan record from the application.",
+                "parameters": [
+                    {
+                        "name": "care_plan_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Delete has done successfully."
+                    },
+                    "403": {
+                        "description": "Return the unauthorized errors when api key header is not provide or not valid.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorsDescription"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "For the given care_plan_id is not found any record."
+                    },
+                    "500": {
+                        "description": "Return internal server error if something has gone wrong.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InternalServerErrorDescription"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CreateCarePlanModel": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "title": "title",
+                        "type": "string",
+                        "description": "Title of the care plan.",
+                        "example": "Feeding care plan"
+                    },
+                    "patient_name": {
+                        "title": "patient_name",
+                        "type": "string",
+                        "description": "Patient name of the care plan.",
+                        "example": "Dorris Day"
+                    },
+                    "create_by_user": {
+                        "title": "create_by_user",
+                        "type": "string",
+                        "description": "Name of the user that added this care plan.",
+                        "example": "Alex.savage"
+                    },
+                    "start_date": {
+                        "title": "start_date",
+                        "type": "string",
+                        "description": "The date on which the care plan would start. The format is ISO 8601(YYYY-MM-DD).",
+                        "format": "date",
+                        "example": "2021-07-30"
+                    },
+                    "target_date": {
+                        "title": "target_date",
+                        "type": "string",
+                        "description": "The date on which the care plan except to finish. The format is ISO 8601(YYYY-MM-DD).",
+                        "format": "date",
+                        "example": "2021-08-10"
+                    },
+                    "reasons": {
+                        "title": "reasons",
+                        "type": "string",
+                        "description": "Some sentences for describing the reasons for the care plan.",
+                        "example": "Ensure client’s weight is maintained"
+                    },
+                    "actions": {
+                        "title": "actions",
+                        "type": "string",
+                        "description": "Some sentences for describing the actions of the care plan.",
+                        "example": "3 hot meals each day and encourage the client to eat at least 75% of each meal. Provide 1 glass of water with each meal."
+                    },
+                    "frequency": {
+                        "title": "frequency",
+                        "type": "string",
+                        "description": "Some sentences for describing the frequency of the care plan.",
+                        "example": "3 times a day"
+                    },
+                    "completed": {
+                        "title": "completed",
+                        "type": "string",
+                        "description": "Indicate is care plan completed or not.",
+                        "example": "Yes or No"
+                    },
+                    "end_date": {
+                        "title": "end_date",
+                        "type": "string",
+                        "description": "The date on which the care plan actually finish. The format is ISO 8601(YYYY-MM-DD).",
+                        "format": "date",
+                        "example": "2021-08-20"
+                    },
+                    "outcomes": {
+                        "title": "outcomes",
+                        "type": "string",
+                        "description": "Some sentences for describing the outcomes of the care plan.",
+                        "example": "Increase quality of life."
+                    }
+                },
+                "additionalProperties": false
+            },
+            "ErrorDescriptionItem": {
+                "type": "object",
+                "properties": {
+                    "source": {
+                        "title": "source",
+                        "type": "string",
+                        "description": "The source of error.",
+                        "readOnly": true,
+                        "example": "Patient Name"
+                    },
+                    "type": {
+                        "title": "type",
+                        "type": "string",
+                        "description": "The type of error.",
+                        "readOnly": true,
+                        "example": "MAXIMUM_LENGTH_EXCEEDED"
+                    },
+                    "message": {
+                        "title": "message",
+                        "type": "string",
+                        "description": "The human readable message of error.",
+                        "readOnly": true,
+                        "example": "The Patient Name value cannot exceed 450 characters."
+                    }
+                },
+                "additionalProperties": false
+            },
+            "ErrorsDescription": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "title": "message",
+                        "type": "string",
+                        "description": "A general description of happened errors.",
+                        "readOnly": true,
+                        "example": "Internal server error."
+                    },
+                    "errors": {
+                        "title": "errors",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ErrorDescriptionItem"
+                        },
+                        "description": "An array of happened errors with their details and type.",
+                        "readOnly": true,
+                        "example": "{ ['source':'Title', 'type':'MISSING_MANDATORY_PROPERTY', 'message':'The Title is mandatory.'] }"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "GetCarePlanModel": {
+                "type": "object",
+                "properties": {
+                    "care_plan_id": {
+                        "title": "care_plan_id",
+                        "type": "integer",
+                        "description": "An auto-increment number filled by application in create.",
+                        "format": "int32",
+                        "readOnly": true
+                    },
+                    "title": {
+                        "title": "title",
+                        "type": "string",
+                        "description": "Title of the care plan.",
+                        "example": "Feeding care plan"
+                    },
+                    "patient_name": {
+                        "title": "patient_name",
+                        "type": "string",
+                        "description": "Patient name of the care plan.",
+                        "example": "Dorris Day"
+                    },
+                    "create_by_user": {
+                        "title": "create_by_user",
+                        "type": "string",
+                        "description": "Name of the user that added this care plan.",
+                        "example": "Alex.savage"
+                    },
+                    "start_date": {
+                        "title": "start_date",
+                        "type": "string",
+                        "description": "The date on which the care plan would start. The format is ISO 8601(YYYY-MM-DD).",
+                        "format": "date",
+                        "example": "2021-07-30"
+                    },
+                    "target_date": {
+                        "title": "target_date",
+                        "type": "string",
+                        "description": "The date on which the care plan except to finish. The format is ISO 8601(YYYY-MM-DD).",
+                        "format": "date",
+                        "example": "2021-08-10"
+                    },
+                    "reasons": {
+                        "title": "reasons",
+                        "type": "string",
+                        "description": "Some sentences for describing the reasons for the care plan.",
+                        "example": "Ensure client’s weight is maintained"
+                    },
+                    "actions": {
+                        "title": "actions",
+                        "type": "string",
+                        "description": "Some sentences for describing the actions of the care plan.",
+                        "example": "3 hot meals each day and encourage the client to eat at least 75% of each meal. Provide 1 glass of water with each meal."
+                    },
+                    "frequency": {
+                        "title": "frequency",
+                        "type": "string",
+                        "description": "Some sentences for describing the frequency of the care plan.",
+                        "example": "3 times a day"
+                    },
+                    "completed": {
+                        "title": "completed",
+                        "type": "string",
+                        "description": "Indicate is care plan completed or not.",
+                        "example": "Yes or No"
+                    },
+                    "end_date": {
+                        "title": "end_date",
+                        "type": "string",
+                        "description": "The date on which the care plan actually finish. The format is ISO 8601(YYYY-MM-DD).",
+                        "format": "date",
+                        "example": "2021-08-20"
+                    },
+                    "outcomes": {
+                        "title": "outcomes",
+                        "type": "string",
+                        "description": "Some sentences for describing the outcomes of the care plan.",
+                        "example": "Increase quality of life."
+                    },
+                    "_links": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/HyperLink"
+                        },
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "HyperLink": {
+                "type": "object",
+                "properties": {
+                    "href": {
+                        "title": "href",
+                        "type": "string",
+                        "description": "Address of the API.",
+                        "readOnly": true,
+                        "example": "/api/care-plans/3"
+                    },
+                    "rel": {
+                        "title": "rel",
+                        "type": "string",
+                        "description": "Type of the API.",
+                        "readOnly": true,
+                        "example": "delete_care"
+                    },
+                    "method": {
+                        "title": "method",
+                        "type": "string",
+                        "description": "HTTP method of the API.",
+                        "readOnly": true,
+                        "example": "DELETE"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "InternalServerErrorDescription": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "title": "message",
+                        "type": "string",
+                        "description": "A general description of happened errors.",
+                        "readOnly": true,
+                        "example": "Internal server error."
+                    }
+                },
+                "additionalProperties": false
+            },
+            "UpdateCarePlanModel": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "title": "title",
+                        "type": "string",
+                        "description": "Title of the care plan.",
+                        "example": "Feeding care plan"
+                    },
+                    "patient_name": {
+                        "title": "patient_name",
+                        "type": "string",
+                        "description": "Patient name of the care plan.",
+                        "example": "Dorris Day"
+                    },
+                    "create_by_user": {
+                        "title": "create_by_user",
+                        "type": "string",
+                        "description": "Name of the user that added this care plan.",
+                        "example": "Alex.savage"
+                    },
+                    "start_date": {
+                        "title": "start_date",
+                        "type": "string",
+                        "description": "The date on which the care plan would start. The format is ISO 8601(YYYY-MM-DD).",
+                        "format": "date",
+                        "example": "2021-07-30"
+                    },
+                    "target_date": {
+                        "title": "target_date",
+                        "type": "string",
+                        "description": "The date on which the care plan except to finish. The format is ISO 8601(YYYY-MM-DD).",
+                        "format": "date",
+                        "example": "2021-08-10"
+                    },
+                    "reasons": {
+                        "title": "reasons",
+                        "type": "string",
+                        "description": "Some sentences for describing the reasons for the care plan.",
+                        "example": "Ensure client’s weight is maintained"
+                    },
+                    "actions": {
+                        "title": "actions",
+                        "type": "string",
+                        "description": "Some sentences for describing the actions of the care plan.",
+                        "example": "3 hot meals each day and encourage the client to eat at least 75% of each meal. Provide 1 glass of water with each meal."
+                    },
+                    "frequency": {
+                        "title": "frequency",
+                        "type": "string",
+                        "description": "Some sentences for describing the frequency of the care plan.",
+                        "example": "3 times a day"
+                    },
+                    "completed": {
+                        "title": "completed",
+                        "type": "string",
+                        "description": "Indicate is care plan completed or not.",
+                        "example": "Yes or No"
+                    },
+                    "end_date": {
+                        "title": "end_date",
+                        "type": "string",
+                        "description": "The date on which the care plan actually finish. The format is ISO 8601(YYYY-MM-DD).",
+                        "format": "date",
+                        "example": "2021-08-20"
+                    },
+                    "outcomes": {
+                        "title": "outcomes",
+                        "type": "string",
+                        "description": "Some sentences for describing the outcomes of the care plan.",
+                        "example": "Increase quality of life."
+                    }
+                },
+                "additionalProperties": false
+            }
+        }
+    }
+}

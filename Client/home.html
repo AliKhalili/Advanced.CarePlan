@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <base href="">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced| Care Plans Management Client</title>
+    <link rel="icon" type="image/png" href="favicon.png"/>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
+        integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <img src="assets/images/logo.jpg" alt="" height="24" class="d-inline-block align-text-top">
+                    Care Plans Management Client
+                </a>
+            </div>
+        </nav>
+        <div class="row">
+            <div class="col">
+                <button type="button" class="btn btn-primary" onclick="CreateAction();"><i
+                        class="fa-solid fa-circle-plus"></i> Create New</button>
+                <button type="button" class="btn btn-primary" onclick="LoadAll();"><i
+                        class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <table class="table table-striped" id="care_plan_table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Patient Name</th>
+                            <th scope="col">Create By</th>
+                            <th scope="col">Start Date</th>
+                            <th scope="col">Target Date</th>
+                            <th scope="col">Is Completed</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail Model -->
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-footer">
+                    <button id="delete_btn" type="button" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-info" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div style="z-index:99999;" class="modal fade" id="errorModal" tabindex="-99" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Errors</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Modal -->
+    <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <small class="form-text text-muted">Title of the care plan. E.g. `Feeding care plan`</small>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
+                                <input id="create_care_title" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <small class="form-text text-muted">Patient name of the care plan. E.g. `Dorris Day`</small>
+                            <div class="input-group mb-3 ">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Patient Name</span>
+                                <input id="create_care_patient_name" type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <small class="form-text text-muted">Name of the user that added this care plan. E.g.
+                                `Alex.savage`</small>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Create By User</span>
+                                <input id="create_care_create_by_user" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <small class="form-text text-muted">Some sentences for describing the frequency of the care
+                                plan.</small>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Frequency</span>
+                                <input id="create_care_frequency" type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <small class="form-text text-muted">The date on which the care plan would start. E.g.
+                                `2021-07-30`</small>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Start Date</span>
+                                <input id="create_care_start_date" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <small class="form-text text-muted">The date on which the care plan except to finish. E.g.
+                                `2021-08-10`</small>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Target Date</span>
+                                <input id="create_care_target_date" type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <small class="form-text text-muted">Some sentences for describing the actions of the care
+                                plan.</small>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Actions</span>
+                                <textarea id="create_care_actions" type="text" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <small class="form-text text-muted">Some sentences for describing the reasons for the care
+                                plan.</small>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Reasons</span>
+                                <textarea id="create_care_reasons" type="text" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <small class="form-text text-muted">Indicate is care plan completed or not. E.g. `Yes` or
+                                `No`</small>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Completed</span>
+                                <input id="create_care_completed" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <small class="form-text text-muted">The date on which the care plan actually finish. E.g.
+                                `2021-08-20`</small>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">End Date</span>
+                                <input id="create_care_end_date" type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <small class="form-text text-muted">Some sentences for describing the outcomes of the care
+                                plan.</small>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Outcomes</span>
+                                <textarea id="create_care_outcomes" type="text" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="create_btn" type="button" class="btn btn-success">Create</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Modal -->
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <small class="form-text text-muted">Title of the care plan. E.g. `Feeding care plan`</small>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
+                                <input id="care_title" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <small class="form-text text-muted">Patient name of the care plan. E.g. `Dorris Day`</small>
+                            <div class="input-group mb-3 ">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Patient Name</span>
+                                <input id="care_patient_name" type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <small class="form-text text-muted">Name of the user that added this care plan. E.g.
+                                `Alex.savage`</small>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Create By User</span>
+                                <input id="care_create_by_user" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <small class="form-text text-muted">Some sentences for describing the frequency of the care
+                                plan.</small>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Frequency</span>
+                                <input id="care_frequency" type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <small class="form-text text-muted">The date on which the care plan would start. E.g.
+                                `2021-07-30`</small>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Start Date</span>
+                                <input id="care_start_date" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <small class="form-text text-muted">The date on which the care plan except to finish. E.g.
+                                `2021-08-10`</small>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Target Date</span>
+                                <input id="care_target_date" type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <small class="form-text text-muted">Some sentences for describing the actions of the care
+                                plan.</small>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Actions</span>
+                                <textarea id="care_actions" type="text" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <small class="form-text text-muted">Some sentences for describing the reasons for the care
+                                plan.</small>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Reasons</span>
+                                <textarea id="care_reasons" type="text" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <small class="form-text text-muted">Indicate is care plan completed or not. E.g. `Yes` or
+                                `No`</small>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Completed</span>
+                                <input id="care_completed" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <small class="form-text text-muted">The date on which the care plan actually finish. E.g.
+                                `2021-08-20`</small>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">End Date</span>
+                                <input id="care_end_date" type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <small class="form-text text-muted">Some sentences for describing the outcomes of the care
+                                plan.</small>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Outcomes</span>
+                                <textarea id="care_outcomes" type="text" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="care_plan_id">
+                    <button id="update_btn" type="button" class="btn btn-success" onclick="DoUpdate();">Update</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OneAdvanced.CarePlan.WebAPIs</name>
+    </assembly>
+    <members>
+        <member name="P:OneAdvanced.CarePlan.WebAPIs.Application.Utils.Swagger.OpenApiClassSchemaAttribute.Description">
+            <summary>
+            A brief description of the object. This could contain examples of use.
+            </summary>
+        </member>
+        <member name="P:OneAdvanced.CarePlan.WebAPIs.Application.Utils.Swagger.OpenApiPropertySchemaAttribute.Title">
+            <summary>
+            Follow JSON Schema definition. Short text providing information about the data.
+            </summary>
+        </member>
+        <member name="P:OneAdvanced.CarePlan.WebAPIs.Application.Utils.Swagger.OpenApiPropertySchemaAttribute.Description">
+            <summary>
+            A brief description of the parameter. This could contain examples of use.
+            CommonMark syntax MAY be used for rich text representation.
+            </summary>
+        </member>
+        <member name="P:OneAdvanced.CarePlan.WebAPIs.Application.Utils.Swagger.OpenApiPropertySchemaAttribute.Required">
+            <summary>
+            Determines whether this parameter is mandatory.
+            If the parameter location is "path", this property is REQUIRED and its value MUST be true.
+            Otherwise, the property MAY be included and its default value is false.
+            </summary>
+        </member>
+        <member name="P:OneAdvanced.CarePlan.WebAPIs.Application.Utils.Swagger.OpenApiPropertySchemaAttribute.Format">
+            <summary>
+            Follow JSON Schema definition: https://tools.ietf.org/html/draft-fge-json-schema-validation-00
+            While relying on JSON Schema's defined formats,
+            the OAS offers a few additional predefined formats.
+            </summary>
+        </member>
+        <member name="P:OneAdvanced.CarePlan.WebAPIs.Application.Utils.Swagger.OpenApiPropertySchemaAttribute.ReadOnly">
+            <summary>
+            Relevant only for Schema "properties" definitions. Declares the property as "read only".
+            This means that it MAY be sent as part of a response but SHOULD NOT be sent as part of the request.
+            If the property is marked as readOnly being true and is in the required list,
+            the required will take effect on the response only.
+            A property MUST NOT be marked as both readOnly and writeOnly being true.
+            Default value is false.
+            </summary>
+        </member>
+        <member name="P:OneAdvanced.CarePlan.WebAPIs.Application.Utils.Swagger.OpenApiPropertySchemaAttribute.Example">
+            <summary>
+            A free-form property to include an example of an instance for this schema.
+            To represent examples that cannot be naturally represented in JSON or YAML,
+            a string value can be used to contain the example with escaping where necessary.
+            </summary>
+        </member>
+        <member name="P:OneAdvanced.CarePlan.WebAPIs.Application.Utils.Swagger.OpenApiPropertySchemaAttribute.Nullable">
+            <summary>
+            Allows sending a null value for the defined schema. Default value is false.
+            </summary>
+        </member>
+        <member name="M:OneAdvanced.CarePlan.WebAPIs.Controllers.CarePlanController.CreateNew(OneAdvanced.CarePlan.WebAPIs.Application.Models.CreateCarePlanModel)">
+            <response code="201">Return the newly added care plan record.</response>
+            <response code="400">Return the errors for the given care plan record.</response>
+            <response code="403">Return the unauthorized errors when api key header is not provide or not valid.</response>
+            <response code="500">Return internal server error if something has gone wrong.</response>
+            <remarks> Add a new care plan record to the application.</remarks>
+        </member>
+        <member name="M:OneAdvanced.CarePlan.WebAPIs.Controllers.CarePlanController.Get(System.Int32)">
+            <response code="200">Return the care plan record for given care_plan_id.</response>
+            <response code="403">Return the unauthorized errors when api key header is not provide or not valid.</response>
+            <response code="404">For the given care_plan_id is not found any record.</response>
+            <remarks> Get care plan information for given care_plan_id.</remarks>
+        </member>
+        <member name="M:OneAdvanced.CarePlan.WebAPIs.Controllers.CarePlanController.GetAll(System.String)">
+            <response code="200">Return information for all care plans.</response>
+            <response code="403">Return the unauthorized errors when api key header is not provide or not valid.</response>
+            <remarks> Get information for all care plans.</remarks>
+        </member>
+        <member name="M:OneAdvanced.CarePlan.WebAPIs.Controllers.CarePlanController.Update(System.Int32,OneAdvanced.CarePlan.WebAPIs.Application.Models.UpdateCarePlanModel)">
+            <response code="204">Update has done successfully.</response>
+            <response code="400">Return the errors for the given care plan record.</response>
+            <response code="403">Return the unauthorized errors when api key header is not provide or not valid.</response>
+            <response code="404">For the given care_plan_id is not found any record.</response>
+            <response code="500">Return internal server error if something has gone wrong.</response>
+            <remarks> Update care plan(totally replace an existing record).</remarks>
+        </member>
+        <member name="M:OneAdvanced.CarePlan.WebAPIs.Controllers.CarePlanController.Delete(System.Int32)">
+            <response code="204">Delete has done successfully.</response>
+            <response code="403">Return the unauthorized errors when api key header is not provide or not valid.</response>
+            <response code="404">For the given care_plan_id is not found any record.</response>
+            <response code="500">Return internal server error if something has gone wrong.</response>
+            <remarks> Delete care plan record from the application.</remarks>
+        </member>
+    </members>
+</doc>
